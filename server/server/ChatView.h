@@ -19,10 +19,19 @@ class ChatView : public QWidget
 public:
     explicit ChatView( QTcpSocket *_client, QWidget *parent = nullptr);
     ~ChatView();
+    struct message {
+        QString name ;
+        int status ; // 1:online , 2:busy , 3:offline
+        QString textMessage ;
+    };
 
-    // void sendMessage() ;
     void receiveMessage() ;
     void showMessage(QString _message , bool _isMyMessage) ;
+
+signals :
+    void setName(QTcpSocket *_client , QString _name) ;
+    void setStatus(QTcpSocket *_client , int _status) ;
+
 
 private slots:
     void on_send_pushButton_clicked();
@@ -30,6 +39,8 @@ private slots:
 private:
     Ui::ChatView *ui;
     QTcpSocket *client ;
+
+
 };
 
 #endif // CHATVIEW_H

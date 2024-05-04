@@ -23,13 +23,17 @@ public:
     void clientRequestConnection() ;
     void clientConnected() ;
     void clientDisconnected();
-    // void receiveMessage() ;
     ~MainWindow();
+
+public slots:
+    void setName(QTcpSocket *_client , QString _name);
+    void setStatus(QTcpSocket *_client , int _status);
+
 
 private:
     Ui::MainWindow *ui;
     QTcpServer *server ;
     QTcpSocket *client ;
-    // void showMessage(QString _message) ;
+    QList<QTcpSocket *> clients ;
 };
 #endif // MAINWINDOW_H

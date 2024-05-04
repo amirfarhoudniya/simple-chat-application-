@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QTcpSocket>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QDataStream>
 
 #include "chatItemWidget.h"
 
@@ -22,6 +25,12 @@ public:
 
     void receiveMessage() ;
 
+    struct message {
+        QString name ;
+        int status ;
+        QString textMessage ;
+    };
+
 
 private slots:
     void on_actionconnect_triggered();
@@ -30,10 +39,13 @@ private slots:
 
     void on_send_pushButton_clicked();
 
+    void on_status_comboBox_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     QTcpSocket *client ;
 
+    void sendMessage(message _msg) ;
     void showMessage(QString _message, bool _isMyMessage) ;
 };
 #endif // MAINWINDOW_H
