@@ -28,6 +28,7 @@ void MainWindow::clientRequestConnection()
     ChatView *clientChatView = new ChatView(client);
     connect(clientChatView , &ChatView::setName , this , &MainWindow::setName) ;
     connect(clientChatView , &ChatView::setStatus , this , &MainWindow::setStatus) ;
+    connect(clientChatView , &ChatView::clientIsTyping , this , &MainWindow::clientIsTyping) ;
     ui->chat_tabWidget->addTab(clientChatView, QString("client %1").arg(id));
 }
 
@@ -61,4 +62,9 @@ void MainWindow::setStatus(QTcpSocket *_client, int _status)
         ui->chat_tabWidget->setTabIcon(id , QIcon(":/icon/icons/redCircle.png"));
     }
 
+}
+
+void MainWindow::clientIsTyping(QString _name)
+{
+    ui->statusbar->showMessage(QString("%1 is Typing ..").arg(_name) , 1000);
 }

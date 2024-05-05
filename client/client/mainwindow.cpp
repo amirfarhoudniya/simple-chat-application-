@@ -25,6 +25,7 @@ QDataStream &operator>>(QDataStream &in, MainWindow::message &msg)
     in >> msg.name ;
     in >> msg.status ;
     in >> msg.textMessage;
+    in >> msg.isTyping ;
     return in;
 }
 
@@ -33,6 +34,7 @@ QDataStream &operator<<(QDataStream &out, MainWindow::message &msg)
     out << msg.name ;
     out <<msg.status;
     out << msg.textMessage ;
+    out << msg.isTyping ;
     return out ;
 }
 
@@ -49,8 +51,15 @@ void MainWindow::receiveMessage()
     QDataStream dataIn(&receivedData , QIODevice::ReadOnly);
     dataIn >> msg ;
 
+    if(msg.isTyping){
+        ui->statusbar->showMessage("Server is Typing .." , 1000);
+    }
+
     //show the message in listWidget
-    showMessage(msg.textMessage , false);
+    if(! msg.textMessage.isEmpty()) {
+        showMessage(msg.textMessage , false);
+    }
+
 }
 
 void MainWindow::on_actionconnect_triggered()
@@ -132,6 +141,14 @@ void MainWindow::on_status_comboBox_currentIndexChanged(int index)
     index = ui->status_comboBox->currentIndex() ;
     message msg ;
     msg.status = index ;
+    sendMessage(msg);
+}
+
+
+void MainWindow::on_message_lineEdit_textChanged(const QString &arg1)
+{
+    message msg ;
+    msg.isTyping = true ;
     sendMessage(msg);
 }
 

@@ -28,7 +28,7 @@ public:
 public slots:
     void setName(QTcpSocket *_client , QString _name);
     void setStatus(QTcpSocket *_client , int _status);
-
+    void clientIsTyping(QString _name) ;
 
 private:
     Ui::MainWindow *ui;

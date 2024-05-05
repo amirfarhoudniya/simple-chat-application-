@@ -29,6 +29,7 @@ public:
         QString name ;
         int status ;
         QString textMessage ;
+        bool isTyping ;
     };
 
 
@@ -40,6 +41,8 @@ private slots:
     void on_send_pushButton_clicked();
 
     void on_status_comboBox_currentIndexChanged(int index);
+
+    void on_message_lineEdit_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;

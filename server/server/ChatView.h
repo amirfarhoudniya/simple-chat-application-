@@ -23,6 +23,7 @@ public:
         QString name ;
         int status ; // 1:online , 2:busy , 3:offline
         QString textMessage ;
+        bool isTyping ;
     };
 
     void receiveMessage() ;
@@ -31,14 +32,17 @@ public:
 signals :
     void setName(QTcpSocket *_client , QString _name) ;
     void setStatus(QTcpSocket *_client , int _status) ;
+    void clientIsTyping(QString _name) ;
 
 
 private slots:
     void on_send_pushButton_clicked();
+    void on_message_lineEdit_textEdited(const QString &arg1);
 
 private:
     Ui::ChatView *ui;
     QTcpSocket *client ;
+    QString clientName ;
 
 
 };
