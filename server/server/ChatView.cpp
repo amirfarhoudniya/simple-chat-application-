@@ -39,7 +39,6 @@ void ChatView::receiveMessage()
 {
     auto receivedData = client->readAll() ;
 
-
     /******* simple way to convert QbyteArray to Qstring *****************/
 
     // auto  data = QString::fromUtf8(receivedData);
@@ -98,11 +97,11 @@ void ChatView::on_send_pushButton_clicked()
     /**************** here we are sending more parameters as struct ************ */
     message msg ;
     msg.textMessage = ui->message_lineEdit->text() ;
-    QByteArray ba ;
-    QDataStream dataOut(&ba , QIODevice::WriteOnly) ;
-    dataOut << msg ;
-    client->write(ba) ;
-
+    // QByteArray ba ;
+    // QDataStream dataOut(&ba , QIODevice::WriteOnly) ;
+    // dataOut << msg ;
+    // client->write(ba) ;
+    sendMessage(msg);
     showMessage(msg.textMessage , true);
 }
 
@@ -114,9 +113,29 @@ void ChatView::on_message_lineEdit_textEdited(const QString &arg1)
     message msg ;
     msg.isTyping = true ;
     msg.name = clientName ;
+    // QByteArray ba ;
+    // QDataStream dataOut(&ba , QIODevice::WriteOnly) ;
+    // dataOut << msg ;
+    // client->write(ba) ;
+    sendMessage(msg);
+}
+
+void ChatView::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Return) {
+        message msg ;
+        msg.textMessage = ui->message_lineEdit->text() ;
+        sendMessage(msg);
+        showMessage(msg.textMessage , true);
+        ui->message_lineEdit->clear();
+    }
+}
+
+void ChatView::sendMessage(message _msg)
+{
     QByteArray ba ;
     QDataStream dataOut(&ba , QIODevice::WriteOnly) ;
-    dataOut << msg ;
+    dataOut << _msg ;
     client->write(ba) ;
 }
 

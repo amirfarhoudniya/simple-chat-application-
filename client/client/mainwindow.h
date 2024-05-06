@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QDataStream>
+#include <QKeyEvent>
 
 #include "chatItemWidget.h"
 
@@ -32,11 +33,13 @@ public:
         bool isTyping ;
     };
 
-
 private slots:
     void on_actionconnect_triggered();
     void connectedToHost() ;
     void disconnectedFromHost() ;
+    void sendMessage(message _msg) ;
+    void showMessage(QString _message, bool _isMyMessage) ;
+    void keyPressEvent(QKeyEvent *event);
 
     void on_send_pushButton_clicked();
 
@@ -48,7 +51,6 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket *client ;
 
-    void sendMessage(message _msg) ;
-    void showMessage(QString _message, bool _isMyMessage) ;
+
 };
 #endif // MAINWINDOW_H

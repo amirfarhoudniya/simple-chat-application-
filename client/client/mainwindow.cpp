@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(client , &QTcpSocket::connected , this , &MainWindow::connectedToHost);
     connect(client , &QTcpSocket::readyRead , this , &MainWindow::receiveMessage) ;
-}
+
+ }
 
 MainWindow::~MainWindow()
 {
@@ -132,9 +133,16 @@ void MainWindow::showMessage(QString _message , bool _isMyMessage)
     ui->message_lineEdit->setText("");
 }
 
-
-
-
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Return) {
+        message msg ;
+        msg.textMessage = ui->message_lineEdit->text() ;
+        sendMessage(msg);
+        showMessage(msg.textMessage , true);
+        ui->message_lineEdit->clear();
+    }
+}
 
 void MainWindow::on_status_comboBox_currentIndexChanged(int index)
 {
@@ -151,4 +159,5 @@ void MainWindow::on_message_lineEdit_textChanged(const QString &arg1)
     msg.isTyping = true ;
     sendMessage(msg);
 }
+
 

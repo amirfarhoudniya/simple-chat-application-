@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QDateTime>
 #include <QTcpSocket>
+#include <QKeyEvent>
 
 #include "chatItemWidget.h"
 #include "mainwindow.h"
@@ -38,6 +39,8 @@ signals :
 private slots:
     void on_send_pushButton_clicked();
     void on_message_lineEdit_textEdited(const QString &arg1);
+    void keyPressEvent(QKeyEvent *event);
+    void sendMessage(message _msg);
 
 private:
     Ui::ChatView *ui;
