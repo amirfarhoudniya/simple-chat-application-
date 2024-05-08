@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(client , &QTcpSocket::connected , this , &MainWindow::connectedToHost);
     connect(client , &QTcpSocket::readyRead , this , &MainWindow::receiveMessage) ;
+    connect(client , &QTcpSocket::disconnected , this , &MainWindow::disconnectedFromHost) ;
 
  }
 
@@ -47,7 +48,7 @@ void MainWindow::receiveMessage()
     /******* simple way to convert QbyteArray to Qstring *****************/
     // auto  data = QString::fromUtf8(receivedData);
 
-    /************ here we are comverting QbyteArray to Struct again *********/
+    /************ here we are converting QbyteArray to Struct again *********/
     message msg ;
     QDataStream dataIn(&receivedData , QIODevice::ReadOnly);
     dataIn >> msg ;
@@ -88,6 +89,7 @@ void MainWindow::connectedToHost()
 void MainWindow::disconnectedFromHost()
 {
     ui->centralwidget->setEnabled(false);
+    QMessageBox::critical(this , "" , "server lost !") ;
 }
 
 
@@ -159,5 +161,7 @@ void MainWindow::on_message_lineEdit_textChanged(const QString &arg1)
     msg.isTyping = true ;
     sendMessage(msg);
 }
+
+
 
 

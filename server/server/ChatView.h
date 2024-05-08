@@ -29,12 +29,13 @@ public:
 
     void receiveMessage() ;
     void showMessage(QString _message , bool _isMyMessage) ;
+    void clientIsDisconnecting() ;
 
 signals :
     void setName(QTcpSocket *_client , QString _name) ;
     void setStatus(QTcpSocket *_client , int _status) ;
     void clientIsTyping(QString _name) ;
-
+    void clientDisconnected(QTcpSocket *_client);
 
 private slots:
     void on_send_pushButton_clicked();

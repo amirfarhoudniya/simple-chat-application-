@@ -9,6 +9,7 @@ ChatView::ChatView(QTcpSocket *_client , QWidget *parent)
     ui->setupUi(this);
 
     connect(client , &QTcpSocket::readyRead , this , &ChatView::receiveMessage) ;
+    connect(client , &QTcpSocket::disconnected , this , &ChatView::clientIsDisconnecting) ;
 
 }
 
@@ -83,6 +84,13 @@ void ChatView::showMessage(QString _message, bool _isMyMessage)
     ui->chat_listWidget->setItemWidget(listItemWidget , chatItem);
     ui->message_lineEdit->setText("");
 }
+
+void ChatView::clientIsDisconnecting()
+{
+    emit clientDisconnected(client);
+}
+
+
 
 
 void ChatView::on_send_pushButton_clicked()

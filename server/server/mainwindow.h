@@ -22,13 +22,16 @@ public:
     void setupServer() ;
     void clientRequestConnection() ;
     void clientConnected() ;
-    void clientDisconnected();
+    void clientDisconnected(QTcpSocket *_client);
     ~MainWindow();
 
 public slots:
     void setName(QTcpSocket *_client , QString _name);
     void setStatus(QTcpSocket *_client , int _status);
     void clientIsTyping(QString _name) ;
+
+private slots:
+    void on_disconnect_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

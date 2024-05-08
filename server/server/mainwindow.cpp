@@ -29,13 +29,26 @@ void MainWindow::clientRequestConnection()
     connect(clientChatView , &ChatView::setName , this , &MainWindow::setName) ;
     connect(clientChatView , &ChatView::setStatus , this , &MainWindow::setStatus) ;
     connect(clientChatView , &ChatView::clientIsTyping , this , &MainWindow::clientIsTyping) ;
+    connect(clientChatView , &ChatView::clientDisconnected , this , &MainWindow::clientDisconnected ) ;
     ui->chat_tabWidget->addTab(clientChatView, QString("client %1").arg(id));
+
 }
 
-
-void MainWindow::clientDisconnected()
+void MainWindow::clientDisconnected(QTcpSocket *_client)
 {
-    ui->clients_listWidget->addItem("client disconncetd");
+    QString clientTabTitleToRemove = _client->property("name").toString();
+
+    for(int i=0 ; i < ui->chat_tabWidget->count() ; i++) {
+        if(clientTabTitleToRemove == ui->chat_tabWidget->tabText(i)) {
+
+            ui->chat_tabWidget->removeTab(i);
+            ui->clients_listWidget->addItem(QString("%1 disconncetd").arg(clientTabTitleToRemove));
+
+            break ;
+        }
+    }
+
+
 }
 
 
@@ -46,13 +59,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::setName(QTcpSocket *_client , QString _name)
 {
+    //set name of client to tab widget title
     auto id = _client->property("id").toInt() - 1 ;
     ui->chat_tabWidget->setTabText(id , _name);
     ui->clients_listWidget->addItem(QString("%1 added").arg(_name));
+    client->setProperty("name" , _name) ;
 }
 
 void MainWindow::setStatus(QTcpSocket *_client, int _status)
 {
+    //add icons to tabWidget of client
     auto id = _client->property("id").toInt() -  1 ;
     if(_status == 0){
         ui->chat_tabWidget->setTabIcon(id , QIcon(":/icon/icons/greenCircle.png"));
@@ -68,3 +84,16 @@ void MainWindow::clientIsTyping(QString _name)
 {
     ui->statusbar->showMessage(QString("%1 is Typing ..").arg(_name) , 1000);
 }
+
+void MainWindow::on_disconnect_pushButton_clicked()
+{
+    for (QTcpSocket* clientSocket : clients) {
+        //close the client connection and clean up the socket object
+        clientSocket->disconnectFromHost();
+        clientSocket->deleteLater();
+    }
+    ui->clients_listWidget->addItem("\n*****************************\n"
+                                    "All clients disconnected ...");
+    ui->disconnect_pushButton->setText("close page");
+}
+
