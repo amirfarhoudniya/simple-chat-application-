@@ -47,6 +47,8 @@ private slots:
 
     void on_message_lineEdit_textChanged(const QString &arg1);
 
+    void on_actionExit_triggered();
+
 private:
     Ui::MainWindow *ui;
     QTcpSocket *client ;
