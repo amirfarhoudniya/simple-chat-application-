@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -42,6 +42,19 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="ip_label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>10</y>
+      <width>701</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Your IP is :</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

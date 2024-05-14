@@ -66,30 +66,45 @@ void MainWindow::receiveMessage()
 
 void MainWindow::on_actionconnect_triggered()
 {
-    bool ok ;
+    ConnectToServer *cts = new ConnectToServer() ;
+    cts->show();
+    connect(cts , &ConnectToServer::nameAndIpHasSet , this , &MainWindow::connectToHost) ;
+}
+
+void MainWindow::connectToHost(ConnectToServer *_cts)
+{
     message msg ;
-    msg.name = QInputDialog::getText(this , "info" , "Enter your Name :" ,QLineEdit::Normal , ""  , &ok) ;
+    msg.name = _cts->name ;
     //status: 0:online , 1:busy , 2:offline
     msg.status = 0 ;
-    if(ok) {
-        ushort port = 6446 ;
-        client->connectToHost(QHostAddress::LocalHost , port);
-    } else {
-        QMessageBox::critical(this , "" , "something bad has happend ..") ;
-    }
+
+    //connect to Host
+    ushort port = 6446 ;
+    client->connectToHost(_cts->ip, port);
+    client->waitForConnected(1000);
+
+    //start a timer to check for connection timeout
+    QTimer::singleShot(3000 , this , [this](){
+        if(client->state() != QAbstractSocket::ConnectedState) {
+            client->abort();
+            QMessageBox::critical(this , "" ,"failed to connect Server");
+        }
+    });
 
     sendMessage(msg);
 }
 
 void MainWindow::connectedToHost()
 {
-    ui->centralwidget->setEnabled(true);
+    if(client->isOpen()) {
+        ui->centralwidget->setEnabled(true);
+    }
 }
 
 void MainWindow::disconnectedFromHost()
 {
     ui->centralwidget->setEnabled(false);
-    QMessageBox::critical(this , "" , "server lost !") ;
+    QMessageBox::critical(this , "" , "server disconnected !") ;
 }
 
 
@@ -137,6 +152,7 @@ void MainWindow::showMessage(QString _message , bool _isMyMessage)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    //send message as "Enter" key pressed
     if(event->key() == Qt::Key_Return) {
         message msg ;
         msg.textMessage = ui->message_lineEdit->text() ;
@@ -161,10 +177,6 @@ void MainWindow::on_message_lineEdit_textChanged(const QString &arg1)
     msg.isTyping = true ;
     sendMessage(msg);
 }
-
-
-
-
 
 void MainWindow::on_actionExit_triggered()
 {

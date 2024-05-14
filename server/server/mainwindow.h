@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QNetworkInterface>
 
 #include "ChatView.h"
 
@@ -23,6 +24,7 @@ public:
     void clientRequestConnection() ;
     void clientConnected() ;
     void clientDisconnected(QTcpSocket *_client);
+    void systemIpAddress() ;
     ~MainWindow();
 
 public slots:

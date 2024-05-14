@@ -4,11 +4,12 @@
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QMessageBox>
-#include <QInputDialog>
 #include <QDataStream>
 #include <QKeyEvent>
+#include <QTimer>
 
 #include "chatItemWidget.h"
+#include "ConnectToServer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,6 +36,7 @@ public:
 
 private slots:
     void on_actionconnect_triggered();
+    void connectToHost(ConnectToServer *_cts);
     void connectedToHost() ;
     void disconnectedFromHost() ;
     void sendMessage(message _msg) ;
@@ -52,7 +54,5 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QTcpSocket *client ;
-
-
 };
 #endif // MAINWINDOW_H

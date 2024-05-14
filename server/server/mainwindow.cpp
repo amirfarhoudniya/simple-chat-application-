@@ -9,6 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("Server");
     setupServer();
+
+    //show system IP address
+    systemIpAddress();
 }
 
 void MainWindow::setupServer()
@@ -47,8 +50,16 @@ void MainWindow::clientDisconnected(QTcpSocket *_client)
             break ;
         }
     }
+}
 
-
+void MainWindow::systemIpAddress()
+{
+    QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+    foreach (const QHostAddress &address, ipAddressesList) {
+        if(address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress::LocalHost) {
+            ui->ip_label->setText(QString("Your IP address is : %1").arg(address.toString()));
+        }
+    }
 }
 
 
