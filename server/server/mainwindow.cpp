@@ -39,13 +39,15 @@ void MainWindow::clientRequestConnection()
 
 void MainWindow::clientDisconnected(QTcpSocket *_client)
 {
-    QString clientTabTitleToRemove = _client->property("name").toString();
+    QString clientName = _client->property("name").toString();
 
+    //find client's tab in tabWidget by client's name
     for(int i=0 ; i < ui->chat_tabWidget->count() ; i++) {
-        if(clientTabTitleToRemove == ui->chat_tabWidget->tabText(i)) {
+
+        if(clientName == ui->chat_tabWidget->tabText(i)) {
 
             ui->chat_tabWidget->removeTab(i);
-            ui->clients_listWidget->addItem(QString("%1 disconncetd").arg(clientTabTitleToRemove));
+            ui->clients_listWidget->addItem(QString("%1 disconncetd").arg(clientName));
 
             break ;
         }
@@ -80,7 +82,21 @@ void MainWindow::setName(QTcpSocket *_client , QString _name)
 void MainWindow::setStatus(QTcpSocket *_client, int _status)
 {
     //add icons to tabWidget of client
-    auto id = _client->property("id").toInt() -  1 ;
+    auto clientName = _client->property("name").toString();
+    int id ;
+
+    //find client's tabId in tabWidget by client's name
+    for(int i=0 ; i < ui->chat_tabWidget->count() ; i++) {
+
+        if(clientName == ui->chat_tabWidget->tabText(i)) {
+
+            id = i ;
+
+            break ;
+        }
+    }
+
+    //set status png to TabIcon of client's tab
     if(_status == 0){
         ui->chat_tabWidget->setTabIcon(id , QIcon(":/icon/icons/greenCircle.png"));
     }else if(_status == 1) {
